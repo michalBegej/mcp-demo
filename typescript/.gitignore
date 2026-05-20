@@ -1,0 +1,30 @@
+# =========================
+# Dependencies
+# =========================
+node_modules/
+
+# =========================
+# Build output
+# =========================
+dist/
+build/
+out/
+
+# =========================
+# TypeScript
+# =========================
+*.tsbuildinfo
+*.js.map
+
+# =========================
+# Test & coverage
+# =========================
+coverage/
+.nyc_output/
+
+# =========================
+# Package managers
+# =========================
+yarn-error.log
+npm-debug.log*
+.pnpm-debug.log*

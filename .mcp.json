@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-demo-dotnet": {
+      "type": "http",
+      "url": "http://localhost:7010/mcp"
+    },
+    "mcp-demo-typescript": {
+      "type": "http",
+      "url": "http://localhost:7020/mcp"
+    }
+  }
+}

@@ -7,6 +7,10 @@
     "mcp-demo-typescript": {
       "type": "http",
       "url": "http://localhost:7020/mcp"
+    },
+    "commercetools-mcp": {
+      "type": "http",
+      "url": "http://localhost:7030/mcp"
     }
   }
 }

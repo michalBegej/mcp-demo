@@ -4,6 +4,7 @@ using System.Text.Json;
 using commercetools.Base.Client.Error;
 using commercetools.Sdk.Api.Models.Orders;
 using McpDemo.Server.Commercetools;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 
 namespace McpDemo.Server.Tools;
@@ -19,7 +20,7 @@ internal sealed class GetOrderTool
 
     [McpServerTool(Name = "get_order_by_id")]
     [Description("Returns order details for the given order ID. The order ID is a unique identifier for an order in the system.")]
-    public async Task<string> GetOrderById(
+    public async Task<CallToolResult> GetOrderById(
         [Description("The order ID to get the order details for.")]
         string orderId, CancellationToken cancellationToken = default)
     {
@@ -27,17 +28,54 @@ internal sealed class GetOrderTool
         {
             IOrder order = await _orderService.GetOrderByIdAsync(orderId, cancellationToken);
 
-            return JsonSerializer.Serialize(new
+            return new CallToolResult
             {
-                Summary = " Order details retrieved successfully.",
-                Order = order
-            });
+                IsError = false,
+                Content =
+                [
+                    new TextContentBlock
+                    {
+                        Text = JsonSerializer.Serialize(new
+                        {
+                            Summary = " Order details retrieved successfully.",
+                            Order = order
+                        })
+                    }
+                ]
+            };
         }
         catch (ApiClientException ex)
         {
-            if (ex.StatusCode == (int)HttpStatusCode.NotFound) return JsonSerializer.Serialize(new { Summary = "Order with provided ID was not found." });
+            if (ex.StatusCode == (int)HttpStatusCode.NotFound)
+                return new CallToolResult
+                {
+                    IsError = true,
+                    Content =
+                    [
+                        new TextContentBlock
+                        {
+                            Text = JsonSerializer.Serialize(new
+                            {
+                                Summary = "Order with provided ID was not found."
+                            })
+                        }
+                    ]
+                };
 
-            return JsonSerializer.Serialize(new { Summary = "Cannot return order with provided Id, please try again later" });
+            return new CallToolResult
+            {
+                IsError = true,
+                Content =
+                [
+                    new TextContentBlock
+                    {
+                        Text = JsonSerializer.Serialize(new
+                        {
+                            Summary = "Cannot return order with provided Id, please try again later"
+                        })
+                    }
+                ]
+            };
         }
     }
 }
